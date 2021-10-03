@@ -9,51 +9,55 @@ import random
 USER = "Joseph Matthew Pye"
 USER_ID = "ljvs65"
 
-def f((x,y)): #This is the energy distribution that the bacteria will follow
-	return 5000 - (x**2 + y**2)
+def f(xy): #This is the energy distribution that the bacteria will follow
+        x = xy[0]
+        y = xy[1]
+        return 5000 - (x**2 + y**2)
 
 x0, y0 = 20., 40. #These are the initial coordinates and the initial energy
 E0 = f((x0, y0))
 n = 1000		#This is the number of steps the bacteria will take
 k = 0.2			#This constant defines the bacteria's sensitivity
 
-def random_walk((x,y)):  #This function simulates a random walk which leads to an energy source
-	dE_dt = 0
-	dt = 100 / n
-	r = numpy.array((x, y))
-	coordinates = numpy.zeros((n,2))
-	bearing = random.random()
-	speed = (2 * numpy.sin(bearing), 2 * numpy.cos(bearing))
-	shift_reg = [E0, E0, E0, E0, E0, E0, E0, E0, E0, E0]
-	for i in range(n):
-		t_half = 1 + k * dE_dt
-		if t_half < 0.01:
-			t_half = 0.01
-		tau = t_half / numpy.log(2)
-		q = random.random()
-		if q < numpy.exp(-dt / tau):
-			r[0] = r[0] + speed[0] * dt
-			r[1] = r[1] + speed[1] * dt
-			coordinates[i,0] = r[0]
-			coordinates[i,1] = r[1]
-		else:
-			bearing = 2*numpy.pi*random.random()
-			speed = (2 * numpy.sin(bearing), 2 *numpy.cos(bearing))
-			r = r
-			coordinates[i,0], coordinates[i,1] = r[0], r[1]
-		new_energy = f(r)
-		shift_reg.append(f(r))
-		shift_reg = shift_reg[1:]
-		dE = shift_reg[-1] - shift_reg[0]
-		dE_dt = dE
-	return coordinates
+def random_walk(xy):  #This function simulates a random walk which leads to an energy source
+        x = xy[0]
+        y = xy[1]
+        dE_dt = 0
+        dt = 100 / n
+        r = numpy.array((x, y))
+        coordinates = numpy.zeros((n,2))
+        bearing = random.random()
+        speed = (2 * numpy.sin(bearing), 2 * numpy.cos(bearing))
+        shift_reg = [E0, E0, E0, E0, E0, E0, E0, E0, E0, E0]
+        for i in range(n):
+                t_half = 1 + k * dE_dt
+                if t_half < 0.01:
+                        t_half = 0.01
+                tau = t_half / numpy.log(2)
+                q = random.random()
+                if q < numpy.exp(-dt / tau):
+                        r[0] = r[0] + speed[0] * dt
+                        r[1] = r[1] + speed[1] * dt
+                        coordinates[i,0] = r[0]
+                        coordinates[i,1] = r[1]
+                else:
+                        bearing = 2*numpy.pi*random.random()
+                        speed = (2 * numpy.sin(bearing), 2 *numpy.cos(bearing))
+                        r = r
+                        coordinates[i,0], coordinates[i,1] = r[0], r[1]
+                new_energy = f(r)
+                shift_reg.append(f(r))
+                shift_reg = shift_reg[1:]
+                dE = shift_reg[-1] - shift_reg[0]
+                dE_dt = dE
+        return coordinates
 
 all_paths=[]	#This uses the random walk to simulate 20 bacteria
 for i in range(20):
 	a = random_walk((x0,y0))
 	all_paths.append(a)
 	
-def find_ms((all_paths)): #This function finds the mean square displacement of the bacteria
+def find_ms(all_paths): #This function finds the mean square displacement of the bacteria
 	dist_energy=[]
 	dist_start=[]
 	for j in range(20):

@@ -18,10 +18,12 @@ KAPPA=0.20
 MASS=1.00
 
 '''This function defines the motion of the oscillator'''
-def f((theta, omega), t):
-	dTheta = omega
-	dOmega = - KAPPA * omega -  g / LENGTH * numpy.sin(theta)
-	return numpy.array((dTheta, dOmega))
+def f(theta_omega, t):
+        theta = theta_omega[0]
+        omega = theta_omega[1]
+        dTheta = omega
+        dOmega = - KAPPA * omega -  g / LENGTH * numpy.sin(theta)
+        return numpy.array((dTheta, dOmega))
 	
 #Initial conditions
 THETA0 = 0.2
@@ -30,14 +32,14 @@ X0 = numpy.array((THETA0, OMEGA0))
 
 '''This function solves the equation for the oscillator numerically'''
 def solve_euler(X0, t1, n_panels):
-	x = X0
-	res_euler = numpy.zeros((n_panels,2))
-	t = t1
-	for i in range (n_panels):
-		t = t + dt
-		res_euler[i] = x
-		x = x + f(x, t) * dt
-	return res_euler
+        x = X0
+        res_euler = numpy.zeros((n_panels,2))
+        t = t1
+        for i in range (n_panels):
+                t = t + dt
+                res_euler[i] = x
+                x = x + f(x, t) * dt
+        return res_euler
 	
 n_panels, t1 = 5000, 20
 dt = t1 / n_panels

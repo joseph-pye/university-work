@@ -9,16 +9,20 @@ USER = 'Joseph Matthew Pye'
 USER_ID = 'ljvs65'
 
 #This is the function which is to be minimised
-def f((x, y)):
-	function = (1 - x)**2 + 100 * (y - x**2)**2
-	return function
+def f(xy):
+        x = xy[0]
+        y = xy[1]
+        function = (1 - x)**2 + 100 * (y - x**2)**2
+        return function
 	
 #This is the corresponding vector function or gradient of f
-def grad_f((x, y)):
-	df_dx = - (2 * (1 - x)) - 400 * x * (y - x**2)
-	df_dy = 200 * (y - x**2)
-	gradient = numpy.array((df_dx, df_dy))
-	return gradient
+def grad_f(xy):
+        x = xy[0]
+        y = xy[1]
+        df_dx = - (2 * (1 - x)) - 400 * x * (y - x**2)
+        df_dy = 200 * (y - x**2)
+        gradient = numpy.array((df_dx, df_dy))
+        return gradient
 
 #These are the points at which our minimisation technique will begin
 r1 = 0.1, 0.7
@@ -63,7 +67,7 @@ minimum = path_1[-1,0], path_1[-1,1]
 
 #This prints the minimum point
 ANSWER2 = 'The minimum point is %.2f, %.2f' %(minimum)
-print ANSWER2
+print(ANSWER2)
 
 #This plots all 3 paths on a grayscale map of the function, red demonstrates a sensible 
 #value of gamma, blue is too large and green is too small
